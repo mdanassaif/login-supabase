@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseBrowserClient";
 export default function Login() {
   const [user, setUser] = useState(null);
   const [isRegistered, setIsRegistered] = useState(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -19,17 +20,17 @@ export default function Login() {
     checkAuth();
   }, []);
 
-  const signInWithGoogle = async () => {
-    setLoading(true);
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "https://supabasesignin.vercel.app", // Redirects back to login app
-      },
-    });
-    setLoading(false);
-  };
-  
+const signInWithGoogle = async () => {
+  setLoading(true);
+  await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: "https://supabasesignin.vercel.app", // Redirects back to login app
+    },
+  });
+  setLoading(false);
+};
+
   
 
   const checkUserRegistration = async (email) => {
@@ -62,7 +63,8 @@ export default function Login() {
               onClick={signInWithGoogle}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg"
             >
-              Sign in with Google
+         
+              {loading ? "Loading..." : "Sign in with Google"}
             </button>
           </>
         ) : isRegistered === false ? (
